@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { GenerateResponse } from 'ollama';
-import { take } from 'rxjs';
 import { MdViewerComponent } from '../components/md-viewer.component';
+import { from, take } from 'rxjs';
+import ollama, { GenerateResponse } from 'ollama';
 
 @Component({
   selector: 'app-ollama',
@@ -19,10 +19,21 @@ import { MdViewerComponent } from '../components/md-viewer.component';
   imports: [MatButtonModule, MdViewerComponent],
 })
 export class OllamaComponent {
+  answer = signal('');
+
+  // getAnswer() {
+  //   const prompt = 'What is generative AI?';
+
+  //   return from(
+  //     ollama.generate({
+  //       model: 'llama3.2',
+  //       prompt: prompt,
+  //     })
+  //   ).subscribe(({ response }) => this.answer.set(response));
+  // }
+
   private apiUrl = '/api/ollama';
   private httpClient = inject(HttpClient);
-
-  answer = signal('');
 
   getAnswer() {
     this.answer.set('Loading...');

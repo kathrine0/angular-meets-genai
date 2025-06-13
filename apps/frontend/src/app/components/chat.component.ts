@@ -1,6 +1,5 @@
 import { Component, computed, effect, ElementRef, input, output, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-// import { OllamaAdapter } from '../adapters/ollama.adapter';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
