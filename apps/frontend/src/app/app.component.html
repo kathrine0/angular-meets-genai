@@ -1,0 +1,18 @@
+<mat-toolbar>
+  <nav>
+    @for (item of navigationItems; track item.path) {
+    <a
+      mat-button
+      [routerLink]="item.path"
+      routerLinkActive="active-link"
+      class="nav-link"
+    >
+      {{ item.label }}
+    </a>
+    }
+  </nav>
+</mat-toolbar>
+
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>

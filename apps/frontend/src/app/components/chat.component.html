@@ -1,0 +1,26 @@
+<div class="chat-container">
+  <section class="messages" #messagesContainer>
+    @for (message of filteredConversation(); track message) {
+    <mat-card
+      appearance="outlined"
+      [class]="'message message__' + message.role"
+    >
+      <mat-card-content>
+        <app-md-viewer [md]="message.content"></app-md-viewer>
+      </mat-card-content>
+    </mat-card>
+    }
+  </section>
+
+  <form
+    class="input-form"
+    (submit)="
+      $event.preventDefault(); prompt.emit(input.value); input.value = ''
+    "
+  >
+    <mat-form-field class="prompt">
+      <mat-label>Enter your prompt...</mat-label>
+      <input matInput #input />
+    </mat-form-field>
+  </form>
+</div>

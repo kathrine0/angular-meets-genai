@@ -1,0 +1,35 @@
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: calc(100%);
+  margin: -1rem;
+}
+
+.messages {
+  padding: 1rem;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.input-form {
+  flex-shrink: 0;
+  margin: 1rem 1rem 0 1rem;
+}
+
+.message {
+  margin: 1rem 0;
+
+  &__user {
+    background-color: var(--mat-sys-surface-container-high);
+    margin-left: 40%;
+  }
+  &__assistant {
+    margin-right: 40%;
+  }
+}
+
+.prompt {
+  width: 100%;
+}
