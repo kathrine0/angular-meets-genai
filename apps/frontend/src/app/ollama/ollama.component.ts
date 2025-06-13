@@ -18,7 +18,7 @@ import { MdViewerComponent } from '../components/md-viewer.component';
   imports: [MatButtonModule, MdViewerComponent],
 })
 export class OllamaComponent {
-  private apiUrl: string = 'http://localhost:3000/ollama';
+  private apiUrl = '/api/ollama';
   private httpClient = inject(HttpClient);
 
   answer = signal('');

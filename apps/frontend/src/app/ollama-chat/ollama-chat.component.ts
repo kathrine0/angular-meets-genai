@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
-import { ChatComponent, Conversation } from '../components/chat.component';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { take } from 'rxjs';
+import { ChatComponent, Conversation } from '../components/chat.component';
 
-const apiUrl = 'http://localhost:3000/ollama-chat';
+const apiUrl = '/api/ollama-chat';
 
 @Component({
   selector: 'app-ollama-chat',

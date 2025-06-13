@@ -7,7 +7,7 @@ interface Message {
   content: string;
 }
 
-const apiUrl = 'http://localhost:3000/ollama-chat';
+const apiUrl = '/api/ollama-chat';
 
 @Injectable({
   providedIn: 'root',

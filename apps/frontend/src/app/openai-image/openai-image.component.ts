@@ -7,7 +7,7 @@ import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 
-const apiUrl = 'http://localhost:3000/openai/image';
+const apiUrl = '/api/openai/image';
 
 @Component({
   selector: 'app-openai',

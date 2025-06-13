@@ -4,7 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { take } from 'rxjs';
 import { ChatComponent, Conversation } from '../components/chat.component';
 
-const apiUrl = 'http://localhost:3000/openai-tools';
+const apiUrl = 'api/openai-tools';
 
 @Component({
   selector: 'app-openai-tools',
