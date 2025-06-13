@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, DestroyRef, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { take } from 'rxjs';
-import { ChatComponent, Conversation } from '../components/chat.component';
-import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { take } from 'rxjs';
+import OpenAI from 'openai';
 
 const apiUrl = '/api/openai/image';
 
@@ -24,10 +24,7 @@ const apiUrl = '/api/openai/image';
     </form>
     <br />
     @if (imageUrl()) {
-      <img
-        [src]="'data:image/png;base64,' + imageUrl()"
-        alt="Generated Image"
-      />
+    <img [src]="'data:image/png;base64,' + imageUrl()" alt="Generated Image" />
     }
   `,
   styles: [
@@ -58,10 +55,14 @@ export class OpenaiImageComponent {
     }
 
     this.httpClient
-      .post(`${apiUrl}`, { prompt })
+      .post<OpenAI.Images.ImagesResponse>(`${apiUrl}`, { prompt })
       .pipe(takeUntilDestroyed(this.destroyRef), take(1))
-      .subscribe((response: any) => {
-        this.imageUrl.set(response.data[0].b64_json);
+      .subscribe((response) => {
+        if (response.data?.[0].b64_json) {
+          this.imageUrl.set(response.data[0].b64_json);
+        } else {
+          console.error('No image data received from OpenAI API');
+        }
       });
   }
 }

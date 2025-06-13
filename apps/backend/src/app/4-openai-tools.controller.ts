@@ -1,5 +1,4 @@
-import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import OpenAI from 'openai';
 import { ResponseInput } from 'openai/resources/responses/responses';
 import { getTicketPrice, getTicketPriceDescription } from './tools';
@@ -8,7 +7,7 @@ import { getTicketPrice, getTicketPriceDescription } from './tools';
 export class OpenAiToolsController {
   private readonly client: OpenAI;
 
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {
+  constructor() {
     this.client = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
@@ -36,7 +35,6 @@ export class OpenAiToolsController {
     messages.push(functionCall);
 
     if (functionCall.name === 'getTicketPrice') {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
       const city: string = JSON.parse(functionCall.arguments).city;
       const result = getTicketPrice(city);
 

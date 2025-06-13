@@ -5,6 +5,7 @@
   "scripts": {
     "start": "nx serve frontend",
     "build": "nx build",
+    "build:all": "nx run-many --target=build --all",
     "ng": "ng"
   },
   "private": true,
@@ -57,6 +58,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "@angular/animations": "~20.0.0",
     "@angular/common": "~20.0.0",
     "@angular/compiler": "~20.0.0",
     "@angular/core": "~20.0.0",

@@ -3,11 +3,13 @@ import { Component, inject, DestroyRef, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { take } from 'rxjs';
 import { ChatComponent, Conversation } from '../components/chat.component';
+import OpenAI from 'openai';
 
-const apiUrl = 'api/openai-tools';
+const apiUrl = '/api/openai';
 
 @Component({
-  selector: 'app-openai-tools',
+  selector: 'app-openai',
+  standalone: true,
   template: `
     <app-chat
       [conversation]="conversation()"
@@ -16,18 +18,14 @@ const apiUrl = 'api/openai-tools';
   `,
   imports: [ChatComponent],
 })
-export class OpenaiToolsComponent {
+export class OpenaiComponent {
   private httpClient = inject(HttpClient);
   private destroyRef = inject(DestroyRef);
 
   conversation = signal<Conversation[]>([
     {
       role: 'system',
-      content: `
-        You are a helpful assistant for an Airline called FlightAI.
-        Give short, courteous answers, no more than 1 sentence.
-        Always be accurate. If you don't know the answer, say so.
-      `,
+      content: 'you are a helpful assistant. Format your answers in markdown',
     },
   ]);
 
@@ -38,11 +36,9 @@ export class OpenaiToolsComponent {
     ]);
 
     this.httpClient
-      .post<string>(`${apiUrl}`, this.conversation())
+      .post<OpenAI.Responses.Response>(`${apiUrl}`, this.conversation())
       .pipe(takeUntilDestroyed(this.destroyRef), take(1))
-      .subscribe((response: any) => {
-        // console.log(response.output[0]);
-
+      .subscribe((response) => {
         this.conversation.update((prev) => [
           ...prev,
           {

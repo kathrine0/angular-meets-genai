@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ChatResponse } from 'ollama';
 import { take } from 'rxjs';
 import { ChatComponent, Conversation } from '../components/chat.component';
 
@@ -23,10 +24,8 @@ export class OllamaChatComponent {
   // add history
   // add system prompt
 
-
   private httpClient = inject(HttpClient);
   private destroyRef = inject(DestroyRef);
-
 
   conversation = signal<Conversation[]>([
     {
@@ -42,9 +41,9 @@ export class OllamaChatComponent {
     ]);
 
     this.httpClient
-      .post<string>(`${apiUrl}`, this.conversation())
+      .post<ChatResponse>(`${apiUrl}`, this.conversation())
       .pipe(takeUntilDestroyed(this.destroyRef), take(1))
-      .subscribe((response: any) => {
+      .subscribe((response: ChatResponse) => {
         this.conversation.update((prev) => [
           ...prev,
           {

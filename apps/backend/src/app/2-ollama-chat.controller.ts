@@ -1,7 +1,7 @@
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Body, Controller, Inject, Param, Post, Sse } from '@nestjs/common';
-import ollama, { Message } from 'ollama';
-import { concat, concatMap, from, map, of } from 'rxjs';
+import ollama, { ChatResponse, Message } from 'ollama';
+import { concat, concatMap, from, map, Observable, of } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 
 const LLAMA_MODEL = 'llama3.2';
@@ -11,18 +11,18 @@ export class OllamaChatController {
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
   @Post()
-  chat(@Body() messages: Message[]) {
+  chat(@Body() messages: Message[]): Observable<ChatResponse> {
     return from(
       ollama.chat({
         model: LLAMA_MODEL,
         messages: messages,
         stream: false,
-      }),
+      })
     );
   }
 
   @Post('create-stream')
-  async createStream(@Body() messages: Message[]) {
+  async createStream(@Body() messages: Message[]): Promise<{ streamId: string }> {
     const streamId = uuidv4();
     await this.cacheManager.set(streamId, messages);
 
@@ -44,11 +44,11 @@ export class OllamaChatController {
         model: LLAMA_MODEL,
         messages: messages,
         stream: true,
-      }),
+      })
     ).pipe(
       concatMap((response) =>
-        from(response).pipe(map((chunk) => chunk.message.content || '')),
-      ),
+        from(response).pipe(map((chunk) => chunk.message.content || ''))
+      )
     );
 
     return concat(ollamaStream$, of({ data: '[DONE]' }));

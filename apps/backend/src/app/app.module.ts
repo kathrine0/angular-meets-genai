@@ -1,22 +1,19 @@
 import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { OllamaController } from './ollama.controller';
-import { OllamaChatController } from './ollama-chat.controller';
-import { OpenAiController } from './openai.controller';
 import { ConfigModule } from '@nestjs/config';
-import { OpenAiToolsController } from './openai-tools.controller';
+import { OllamaController } from './1-ollama.controller';
+import { OllamaChatController } from './2-ollama-chat.controller';
+import { OpenAiToolsController } from './4-openai-tools.controller';
+import { OpenAiController } from './3-openai.controller';
 
 @Module({
   imports: [CacheModule.register(), ConfigModule.forRoot()],
   controllers: [
-    AppController,
     OllamaController,
     OllamaChatController,
     OpenAiController,
     OpenAiToolsController,
   ],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule {}
