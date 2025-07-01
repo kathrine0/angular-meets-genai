@@ -24,6 +24,6 @@ export class AppComponent {
     { path: '/openai', label: 'OpenAI' },
     { path: '/openai-image', label: 'OpenAI Image' },
     { path: '/openai-tools', label: 'OpenAI Tools' },
-    { path: '/os-model', label: 'OS Model' },
+    { path: '/code-gen', label: 'Code Gen' },
   ];
 }

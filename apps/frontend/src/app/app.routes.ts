@@ -27,7 +27,7 @@ export const routes: Routes = [
     loadComponent: () => import('./4-openai-tools/openai-tools.component').then(m => m.OpenaiToolsComponent)
   },
   {
-    path: 'os-model',
-    loadComponent: () => import('./5-os-model/os-model.component').then(m => m.OsModelComponent)
+    path: 'code-gen',
+    loadComponent: () => import('./5-code-gen/code-gen.component').then(m => m.CodeGenComponent)
   }
 ];

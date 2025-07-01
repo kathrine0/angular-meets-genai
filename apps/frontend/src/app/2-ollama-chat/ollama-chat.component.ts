@@ -16,7 +16,6 @@ const apiUrl = '/api/ollama-chat';
     ></app-chat>
   `,
   imports: [ChatComponent],
-  providers: [],
 })
 export class OllamaChatComponent {
   // TODO
@@ -43,7 +42,7 @@ export class OllamaChatComponent {
     this.httpClient
       .post<ChatResponse>(`${apiUrl}`, this.conversation())
       .pipe(takeUntilDestroyed(this.destroyRef), take(1))
-      .subscribe((response: ChatResponse) => {
+      .subscribe((response) => {
         this.conversation.update((prev) => [
           ...prev,
           {
