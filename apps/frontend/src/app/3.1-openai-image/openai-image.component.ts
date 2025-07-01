@@ -50,6 +50,7 @@ export class OpenaiImageComponent {
 
   generateImage(event: Event, prompt: string): void {
     event.preventDefault();
+
     if (prompt.trim() === '') {
       return;
     }

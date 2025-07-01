@@ -1,11 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Message } from 'ollama';
 import { Observable, switchMap } from 'rxjs';
-
-interface Message {
-  role: 'system' | 'user' | 'assistant';
-  content: string;
-}
 
 const apiUrl = '/api/ollama-chat';
 
@@ -43,7 +39,7 @@ export class OllamaChatStreamService {
       eventSource.onerror = (error) => {
         console.error('EventSource error: ' + error);
         eventSource.close();
-        subscriber.complete();
+        subscriber.error('EventSource error: ' + error);
       };
     });
   }

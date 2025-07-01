@@ -8,49 +8,52 @@ const LLAMA_MODEL = 'llama3.2';
 
 @Controller('ollama-chat')
 export class OllamaChatController {
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
-  @Post()
-  chat(@Body() messages: Message[]): Observable<ChatResponse> {
-    return from(
-      ollama.chat({
-        model: LLAMA_MODEL,
-        messages: messages,
-        stream: false,
-      })
-    );
-  }
+  // @Post()
+  // chat(@Body() messages: Message[]): Promise<ChatResponse> {
+  //   return ollama.chat({
+  //     model: LLAMA_MODEL,
+  //     messages: messages,
+  //     stream: false,
+  //   });
+  // }
 
-  @Post('create-stream')
-  async createStream(@Body() messages: Message[]): Promise<{ streamId: string }> {
-    const streamId = uuidv4();
-    await this.cacheManager.set(streamId, messages);
 
-    return { streamId };
-  }
 
-  @Sse('stream/:streamId')
-  async getOllamaStream(@Param('streamId') streamId: string) {
-    const messages = await this.cacheManager.get<Message[]>(streamId);
 
-    if (!messages) {
-      throw new Error('Stream not found');
-    }
 
-    await this.cacheManager.del(streamId);
+  // constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
-    const ollamaStream$ = from(
-      ollama.chat({
-        model: LLAMA_MODEL,
-        messages: messages,
-        stream: true,
-      })
-    ).pipe(
-      concatMap((response) =>
-        from(response).pipe(map((chunk) => chunk.message.content || ''))
-      )
-    );
+  // @Post('create-stream')
+  // async createStream(@Body() messages: Message[]): Promise<{ streamId: string }> {
+  //   const streamId = uuidv4();
+  //   await this.cacheManager.set(streamId, messages);
 
-    return concat(ollamaStream$, of({ data: '[DONE]' }));
-  }
+  //   return { streamId };
+  // }
+
+  // @Sse('stream/:streamId')
+  // async getOllamaStream(@Param('streamId') streamId: string) {
+  //   const messages = await this.cacheManager.get<Message[]>(streamId);
+
+  //   if (!messages) {
+  //     throw new Error('Stream not found');
+  //   }
+
+  //   await this.cacheManager.del(streamId);
+
+  //   const ollamaStream$ = from(
+  //     ollama.chat({
+  //       model: LLAMA_MODEL,
+  //       messages: messages,
+  //       stream: true,
+  //     })
+  //   ).pipe(
+  //     concatMap((response) =>
+  //       from(response).pipe(map((chunk) => chunk.message.content || ''))
+  //     )
+  //   );
+
+  //   return concat(ollamaStream$, of({ data: '[DONE]' }));
+  // }
 }

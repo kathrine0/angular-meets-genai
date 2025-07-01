@@ -128,8 +128,9 @@ export class CodeGenComponent {
   }
 
   onExecute(): void {
-    if (this.executionContainer()) {
-      this.executionContainer()!.nativeElement.innerHTML = this.currentAnswer();
+    const ec = this.executionContainer();
+    if (ec) {
+      ec.nativeElement.innerHTML = this.currentAnswer();
     }
   }
 }
