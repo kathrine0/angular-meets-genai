@@ -5,6 +5,8 @@ import { take } from 'rxjs';
 import { ChatComponent, Conversation } from '../components/chat.component';
 import OpenAI from 'openai';
 
+// Slides before
+
 const apiUrl = '/api/openai';
 
 @Component({

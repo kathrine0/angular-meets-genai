@@ -3,11 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { OpenAI } from 'openai';
 import { Observable, switchMap } from 'rxjs';
 
-interface Message {
-  role: 'system' | 'user' | 'assistant';
-  content: string;
-}
-
 const apiUrl = '/api/code-gen';
 
 @Injectable({

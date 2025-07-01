@@ -13,21 +13,43 @@ export class OpenAiToolsController {
     });
   }
 
-  @Post()
-  async chat(@Body() messages: ResponseInput) {
-    const response = await this.client.responses.create({
+  // System prompt:
+  // You are a helpful assistant for an Airline called FlightAI.
+  // Give short, courteous answers, no more than 1 sentence.
+  // Always be accurate. If you don't know the answer, say so.
+
+  private async promptOpenAi(messages: ResponseInput) {
+    return await this.client.responses.create({
       model: 'gpt-4.1',
       input: messages,
       tools: [getTicketPriceDescription],
     });
+  }
 
-    if (response.output[0].type === 'function_call') {
-      return await this.callWithToolResponse(messages, response.output[0]);
-    }
+  @Post()
+  async chat(@Body() messages: ResponseInput) {
+    const response = await this.promptOpenAi(messages);
+    // debugger;
+
 
     return response;
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+  // if (response.output[0].type === 'function_call') {
+  //   return await this.callWithToolResponse(messages, response.output[0]);
+  // }
   private async callWithToolResponse(
     messages: ResponseInput,
     functionCall: OpenAI.Responses.ResponseFunctionToolCall,
@@ -45,10 +67,6 @@ export class OpenAiToolsController {
       });
     }
 
-    return await this.client.responses.create({
-      model: 'gpt-4.1',
-      input: messages,
-      tools: [getTicketPriceDescription],
-    });
+    return await this.promptOpenAi(messages);
   }
 }

@@ -18,38 +18,44 @@ const apiUrl = '/api/ollama-chat';
   imports: [ChatComponent],
 })
 export class OllamaChatComponent {
-  // TODO
-  // simple chat with no history
-  // add history
-  // add system prompt
+  conversation = signal<Conversation[]>([]);
 
-  private httpClient = inject(HttpClient);
-  private destroyRef = inject(DestroyRef);
-
-  conversation = signal<Conversation[]>([
-    {
-      role: 'system',
-      content: 'you are a helpful assistant. Format your answers in markdown',
-    },
-  ]);
-
-  onPrompt(prompt: string): void {
+  onPrompt(prompt: string) {
     this.conversation.update((prev) => [
       ...prev,
       { role: 'user', content: prompt },
     ]);
-
-    this.httpClient
-      .post<ChatResponse>(`${apiUrl}`, this.conversation())
-      .pipe(takeUntilDestroyed(this.destroyRef), take(1))
-      .subscribe((response) => {
-        this.conversation.update((prev) => [
-          ...prev,
-          {
-            role: 'assistant',
-            content: response.message.content,
-          },
-        ]);
-      });
   }
+
+  // private httpClient = inject(HttpClient);
+  // private destroyRef = inject(DestroyRef);
+
+  // onPrompt(prompt: string): void {
+  //   this.conversation.update((prev) => [
+  //     ...prev,
+  //     { role: 'user', content: prompt },
+  //   ]);
+
+  //   this.httpClient
+  //     .post<ChatResponse>(`${apiUrl}`, [{ role: 'user', content: prompt }])
+  //     .pipe(takeUntilDestroyed(this.destroyRef), take(1))
+  //     .subscribe((response) => {
+  //       this.conversation.update((prev) => [
+  //         ...prev,
+  //         {
+  //           role: 'assistant',
+  //           content: response.message.content,
+  //         },
+  //       ]);
+  //     });
+  // }
+
+  // .post<ChatResponse>(`${apiUrl}`, this.conversation())
+
+  // conversation = signal<Conversation[]>([
+  //   {
+  //     role: 'system', // available roles: "system" | "user" | "assistant"
+  //     content: 'you are a helpful assistant. Format your answers in markdown',
+  //   },
+  // ]);
 }

@@ -2,8 +2,9 @@ import { FunctionTool } from 'openai/resources/responses/responses';
 
 export const getTicketPriceDescription: FunctionTool = {
   name: 'getTicketPrice',
-  description:
-    "Get the price of a return ticket to the destination city. Call this whenever you need to know the ticket price, for example when a customer asks 'How much is a ticket to this city'",
+  description: `Get the price of a return ticket to the destination city.
+                Call this whenever you need to know the ticket price,
+                for example when a customer asks 'How much is a ticket to this city'`,
   parameters: {
     type: 'object',
     properties: {
@@ -29,4 +30,4 @@ export const getTicketPrice = (city: string): string => {
   };
 
   return prices[city.toLowerCase()] || 'Unknown city';
-}
+};
