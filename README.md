@@ -2,6 +2,11 @@
 
 This is the repository for the "Beyond the Browser: Angular meets GenAI" talk.
 
+## Prerequisities
+
+- install Llama on your local machine and make sure it's running
+- if you want to take advantage of OpenAI integration, generate an API key (https://platform.openai.com/api-keys) and place it in the .env file. You can use .env.template as sample
+
 ## Run
 
 install dependencies:
