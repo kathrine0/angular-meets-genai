@@ -13,7 +13,7 @@ import ollama, { GenerateResponse } from 'ollama';
     <br />
     <br />
     @if (answer()) {
-      <app-md-viewer [md]="answer()" />
+    <app-md-viewer [md]="answer()" />
     }
   `,
   imports: [MatButtonModule, MdViewerComponent],
@@ -31,15 +31,17 @@ export class OllamaComponent {
 
 
 
-  // getAnswer() {
-  //   const prompt = 'What is generative AI?';
 
-  //   return from(
-  //     ollama.generate({
-  //       model: 'llama3.2',
-  //       prompt: prompt,
-  //     })
-  //   ).subscribe((result: GenerateResponse) => this.answer.set(result.response));
+  // async getAnswer() {
+  //   const prompt = 'What is generative AI? Keep the answer short and concise.';
+  //   this.answer.set('Loading...');
+
+  //   const response = await ollama.generate({
+  //     model: 'llama3.2',
+  //     prompt: prompt,
+  //   });
+
+  //   this.answer.set(response.response);
   // }
 
 
@@ -48,10 +50,10 @@ export class OllamaComponent {
 
 
 
-  
+
+
   // private apiUrl = '/api/ollama';
   // private httpClient = inject(HttpClient);
-
   // getAnswer() {
   //   this.answer.set('Loading...');
 
