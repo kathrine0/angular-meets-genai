@@ -13,8 +13,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import OpenAI from 'openai';
-import { OSModelStreamService } from './code-gen-stream.service';
+import { StreamHelper } from '../stream.helper';
+import { tap } from 'rxjs/operators';
 
+// https://hashbrown.dev/
+
+const apiUrl = '/api/code-gen';
 @Component({
   selector: 'app-code-gen',
   template: `
@@ -79,7 +83,7 @@ import { OSModelStreamService } from './code-gen-stream.service';
 })
 export class CodeGenComponent {
   private destroyRef = inject(DestroyRef);
-  private service = inject(OSModelStreamService);
+  private streamHelper = inject(StreamHelper);
 
   private systemPrompt = `You are tasked with creating an HTML code snippet that fulfills the task given by the human.
                 You will receive a prompt from the human, and you should respond with an HTML code snippet that meets the requirements.
@@ -111,19 +115,18 @@ export class CodeGenComponent {
       },
     ];
 
-    this.service
-      .askQuestion(messages)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response) => {
-          this.currentAnswer.update((prev) => prev + response);
-        },
-        error: (error) => {
-          console.error('Error:', error);
-        },
-        complete: () => {
+    this.streamHelper
+      .stream(apiUrl, messages)
+      .pipe(
+        tap(() => this.generateCodeButtonEnabled.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(({ response, generating }) => {
+        if (generating) {
+          this.currentAnswer.set(response);
+        } else {
           this.generateCodeButtonEnabled.set(true);
-        },
+        }
       });
   }
 
