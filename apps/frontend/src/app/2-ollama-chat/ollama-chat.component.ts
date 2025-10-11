@@ -18,44 +18,16 @@ const apiUrl = '/api/ollama-chat';
   imports: [ChatComponent],
 })
 export class OllamaChatComponent {
-  // conversation = signal<Conversation[]>([]);
+  conversation = signal<Conversation[]>([]);
 
-  conversation = signal<Conversation[]>([
-    {
-      role: 'system', // available roles: "system" | "user" | "assistant"
-      content: 'you are a helpful assistant. Format your answers in markdown',
-    },
-  ]);
-
-  private httpClient = inject(HttpClient);
-  private destroyRef = inject(DestroyRef);
-
-  onPrompt(prompt: string): void {
+  onPrompt(prompt: string) {
     this.conversation.update((prev) => [
       ...prev,
       { role: 'user', content: prompt },
     ]);
 
-    this.httpClient
-      .post<ChatResponse>(`${apiUrl}`, this.conversation())
-      .pipe(takeUntilDestroyed(this.destroyRef), take(1))
-      .subscribe((response) => {
-        this.conversation.update((prev) => [
-          ...prev,
-          {
-            role: 'assistant',
-            content: response.message.content,
-          },
-        ]);
-      });
+    console.log(this.conversation());
   }
-
-  // onPrompt(prompt: string) {
-  //   this.conversation.update((prev) => [
-  //     ...prev,
-  //     { role: 'user', content: prompt },
-  //   ]);
-  // }
 
   // private httpClient = inject(HttpClient);
   // private destroyRef = inject(DestroyRef);
@@ -85,7 +57,7 @@ export class OllamaChatComponent {
   // conversation = signal<Conversation[]>([
   //   {
   //     role: 'system', // available roles: "system" | "user" | "assistant"
-  //     content: 'you are a helpful assistant. Format your answers in markdown',
+  //     content: 'you are a grumpy assistant. Format your answers in markdown',
   //   },
   // ]);
 }

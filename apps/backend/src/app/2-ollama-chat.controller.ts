@@ -10,27 +10,32 @@ export class OllamaChatController {
   chat(@Body() messages: Message[]): Promise<ChatResponse> {
     return ollama.chat({
       model: LLAMA_MODEL,
-      messages: messages,
-      stream: false,
+      messages: messages
     });
   }
 
+
+
+
   @Post('stream')
-  async stream(@Body() messages: Message[], @Res() res: Response) {
-    res.setHeader('Content-Type', 'application/x-ndjson');
-    res.setHeader('Transfer-Encoding', 'chunked');
-    res.flushHeaders();
+  async stream(
+    // @Body() messages: Message[],
+    // @Res() res: Response
+  ) {
+    // res.setHeader('Content-Type', 'application/x-ndjson');
+    // res.setHeader('Transfer-Encoding', 'chunked');
+    // res.flushHeaders();
 
-    const result = await ollama.chat({
-      model: LLAMA_MODEL,
-      messages: messages,
-      stream: true,
-    });
+    // const result = await ollama.chat({
+    //   model: LLAMA_MODEL,
+    //   messages: messages,
+    //   stream: true,
+    // });
 
-    for await (const chunk of result) {
-      res.write(chunk.message.content);
-    }
+    // for await (const chunk of result) {
+    //   res.write(chunk.message.content);
+    // }
 
-    return res.end();
+    // return res.end();
   }
 }

@@ -27,21 +27,11 @@ export class OllamaChatStreamComponent {
   chatHistory = signal<Conversation[]>([
     {
       role: 'system',
-      content: 'you are a witty assistant. Format your answers in markdown',
+      content: 'you are a helpful assistant. Format your answers in markdown',
     },
   ]);
 
-  // conversation = computed<Conversation[]>(() => this.chatHistory());
-
-  streamedAnswer = signal<string>('');
-  conversation = computed<Conversation[]>(() =>
-    this.streamedAnswer()
-      ? [
-          ...this.chatHistory(),
-          { role: 'assistant', content: this.streamedAnswer() },
-        ]
-      : this.chatHistory()
-  );
+  conversation = computed<Conversation[]>(() => this.chatHistory());
 
   private httpClient = inject(HttpClient);
   private destroyRef = inject(DestroyRef);
@@ -53,42 +43,66 @@ export class OllamaChatStreamComponent {
     ]);
 
     this.httpClient
-      .post(`${apiUrl}`, this.chatHistory(), {
-        responseType: 'text',
-        observe: 'events',
-        reportProgress: true,
-      })
-      .pipe(
-        filter(
-          (event: HttpEvent<string>): boolean =>
-            event.type === HttpEventType.DownloadProgress ||
-            event.type === HttpEventType.Response
-        ),
-        map((event: HttpEvent<string>) => {
-          if (event.type === HttpEventType.DownloadProgress) {
-            return {
-              response: (event as HttpDownloadProgressEvent).partialText ?? '',
-              generating: true,
-            };
-          } else {
-            return {
-              response: (event as HttpResponse<string>).body ?? '',
-              generating: false,
-            };
-          }
-        }),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe(({ response, generating }) => {
-        if (generating) {
-          this.streamedAnswer.set(response);
-        } else {
-          this.chatHistory.update((prev) => [
-            ...prev,
-            { role: 'assistant', content: response },
-          ]);
-          this.streamedAnswer.set('');
-        }
+      .post(apiUrl, this.chatHistory())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((response) => {
+        console.log(response);
       });
   }
+
+  // streamedAnswer = signal<string>('');
+  // conversation = computed<Conversation[]>(() =>
+  //   this.streamedAnswer()
+  //     ? [
+  //         ...this.chatHistory(),
+  //         { role: 'assistant', content: this.streamedAnswer() },
+  //       ]
+  //     : this.chatHistory()
+  // );
+
+  // onPrompt(prompt: string): void {
+  //   this.chatHistory.update((prev) => [
+  //     ...prev,
+  //     { role: 'user', content: prompt },
+  //   ]);
+
+  //   this.httpClient
+  //     .post(apiUrl, this.chatHistory(), {
+  //       responseType: 'text',
+  //       observe: 'events',
+  //       reportProgress: true,
+  //     })
+  //     .pipe(
+  //       filter(
+  //         (event: HttpEvent<string>): boolean =>
+  //           event.type === HttpEventType.DownloadProgress ||
+  //           event.type === HttpEventType.Response
+  //       ),
+  //       map((event: HttpEvent<string>) => {
+  //         if (event.type === HttpEventType.DownloadProgress) {
+  //           return {
+  //             response: (event as HttpDownloadProgressEvent).partialText ?? '',
+  //             generating: true,
+  //           };
+  //         } else {
+  //           return {
+  //             response: (event as HttpResponse<string>).body ?? '',
+  //             generating: false,
+  //           };
+  //         }
+  //       }),
+  //       takeUntilDestroyed(this.destroyRef)
+  //     )
+  //     .subscribe(({ response, generating }) => {
+  //       if (generating) {
+  //         this.streamedAnswer.set(response);
+  //       } else {
+  //         this.chatHistory.update((prev) => [
+  //           ...prev,
+  //           { role: 'assistant', content: response },
+  //         ]);
+  //         this.streamedAnswer.set('');
+  //       }
+  //     });
+  // }
 }
