@@ -33,8 +33,9 @@ nav {
 }
 
 .main-content {
-  margin: 1rem;
+  padding: 1rem;
   height: calc(100vh - 64px); // Adjust for toolbar height
+  overflow-x: hidden;
 }
 
 :host {
