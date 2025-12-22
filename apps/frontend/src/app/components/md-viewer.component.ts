@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   Component,
   computed,
@@ -10,7 +10,7 @@ import { Remarkable } from 'remarkable';
 
 @Component({
   selector: 'app-md-viewer',
-  imports: [CommonModule],
+  imports: [],
   template: ` <div [innerHTML]="content()"></div> `,
   styles: [
     `
