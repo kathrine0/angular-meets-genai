@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MdViewerComponent } from '../components/md-viewer.component';
 import { from, take } from 'rxjs';
@@ -17,6 +17,7 @@ import ollama, { GenerateResponse } from 'ollama';
     }
   `,
   imports: [MatButtonModule, MdViewerComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OllamaComponent {
   answer = signal('');

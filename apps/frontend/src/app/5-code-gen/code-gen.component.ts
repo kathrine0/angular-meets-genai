@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   ElementRef,
@@ -80,6 +81,7 @@ const apiUrl = '/api/code-gen';
     `,
   ],
   imports: [MatFormFieldModule, MatInputModule, MatButtonModule, FormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CodeGenComponent {
   private destroyRef = inject(DestroyRef);

@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChatComponent, Conversation } from '../components/chat.component';
 import { StreamHelper } from '../stream.helper';
@@ -17,6 +17,7 @@ const apiUrl = '/api/openai';
     ></app-chat>
   `,
   imports: [ChatComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpenaiComponent {
   private destroyRef = inject(DestroyRef);

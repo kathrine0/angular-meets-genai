@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, DestroyRef, signal } from '@angular/core';
+import { Component, inject, DestroyRef, signal, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { take } from 'rxjs';
 import { ChatComponent, Conversation } from '../components/chat.component';
@@ -16,6 +16,7 @@ const apiUrl = 'api/openai-tools';
     ></app-chat>
   `,
   imports: [ChatComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpenaiToolsComponent {
   private httpClient = inject(HttpClient);

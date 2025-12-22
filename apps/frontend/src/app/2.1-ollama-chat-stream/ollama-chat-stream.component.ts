@@ -5,7 +5,7 @@ import {
   HttpEventType,
   HttpResponse,
 } from '@angular/common/http';
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs/operators';
 import { ChatComponent, Conversation } from '../components/chat.component';
@@ -22,6 +22,7 @@ const apiUrl = '/api/ollama-chat/stream';
   `,
   imports: [ChatComponent],
   providers: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OllamaChatStreamComponent {
   chatHistory = signal<Conversation[]>([

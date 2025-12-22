@@ -5,6 +5,7 @@ import {
   ElementRef,
   input,
   viewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { Remarkable } from 'remarkable';
 
@@ -19,6 +20,7 @@ import { Remarkable } from 'remarkable';
       }
     `,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MdViewerComponent {
   private readonly remarkable = new Remarkable();

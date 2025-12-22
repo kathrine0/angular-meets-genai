@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChatResponse } from 'ollama';
 import { take } from 'rxjs';
@@ -16,6 +16,7 @@ const apiUrl = '/api/ollama-chat';
     ></app-chat>
   `,
   imports: [ChatComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OllamaChatComponent {
   // conversation = signal<Conversation[]>([]);

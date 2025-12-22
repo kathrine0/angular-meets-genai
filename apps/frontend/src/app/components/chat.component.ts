@@ -1,4 +1,4 @@
-import { Component, computed, effect, ElementRef, input, output, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, ElementRef, input, output, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -23,6 +23,7 @@ export interface Conversation {
     MatCardModule,
     MdViewerComponent
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatComponent {
   messagesContainer = viewChild<ElementRef<HTMLElement>>('messagesContainer');
