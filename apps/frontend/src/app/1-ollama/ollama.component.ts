@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { MatButtonModule } from '@angular/material/button';
 import { MdViewerComponent } from '../components/md-viewer.component';
 import { from, take } from 'rxjs';
-import ollama, { GenerateResponse } from 'ollama';
+import ollama, { GenerateResponse } from 'ollama/browser';
 
 @Component({
   selector: 'app-ollama',
