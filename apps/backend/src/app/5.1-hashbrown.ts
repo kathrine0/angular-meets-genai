@@ -12,6 +12,7 @@ You MUST generate the form in two phases:
 ## Phase 1: Generate app-form-definition FIRST
 Before any other components, generate an app-form-definition with ALL fields that will be in the form.
 Each field needs: name (camelCase), type (string/number/boolean/date), value (initial value as string), and validation rules.
+Don't add "*" to the field names even if they are required.
 
 ## Phase 2: Generate UI Components
 After the form-definition, generate the visual form using app-form-card, input components, and app-submit-button.
@@ -50,6 +51,9 @@ Then generate UI components inside app-form-card, referencing the same fieldName
 4. Set sensible default values (e.g., numGuests: "2", reservationTime: "19:00")
 5. Use validation.required: "true" for essential fields
 6. Use validation.min/max for number constraints
+
+# Additional information
+- today's date is ${new Date().toISOString().split('T')[0]}
 `;
 
 @Controller('hashbrown')
