@@ -25,14 +25,15 @@ const apiUrl = '/api/ollama-chat/stream';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OllamaChatStreamComponent {
+  private httpClient = inject(HttpClient);
+  private destroyRef = inject(DestroyRef);
+
   chatHistory = signal<Conversation[]>([
     {
       role: 'system',
       content: 'you are a witty assistant. Format your answers in markdown',
     },
   ]);
-
-  // conversation = computed<Conversation[]>(() => this.chatHistory());
 
   streamedAnswer = signal<string>('');
   conversation = computed<Conversation[]>(() =>
@@ -43,9 +44,6 @@ export class OllamaChatStreamComponent {
         ]
       : this.chatHistory()
   );
-
-  private httpClient = inject(HttpClient);
-  private destroyRef = inject(DestroyRef);
 
   onPrompt(prompt: string): void {
     this.chatHistory.update((prev) => [

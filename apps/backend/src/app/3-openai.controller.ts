@@ -39,6 +39,14 @@ export class OpenAiController {
     return res.end();
   }
 
+
+
+
+
+
+
+
+  
   @Post('image')
   generateImage(
     @Body() body: { prompt: string }

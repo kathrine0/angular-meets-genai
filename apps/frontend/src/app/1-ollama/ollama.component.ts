@@ -22,9 +22,9 @@ import ollama, { GenerateResponse } from 'ollama/browser';
 export class OllamaComponent {
   answer = signal('');
 
-  // getAnswer() {
-  //   console.error('not implemented yet.');
-  // }
+  getAnswer() {
+    console.error('not implemented yet.');
+  }
 
 
 
@@ -53,16 +53,16 @@ export class OllamaComponent {
 
 
 
-  private apiUrl = '/api/ollama';
-  private httpClient = inject(HttpClient);
-  getAnswer() {
-    this.answer.set('Loading...');
+  // private apiUrl = '/api/ollama';
+  // private httpClient = inject(HttpClient);
+  // getAnswer() {
+  //   this.answer.set('Loading...');
 
-    this.httpClient
-      .get<GenerateResponse>(this.apiUrl)
-      .pipe(take(1))
-      .subscribe(({ response }) => {
-        this.answer.set(response);
-      });
-  }
+  //   this.httpClient
+  //     .get<GenerateResponse>(this.apiUrl)
+  //     .pipe(take(1))
+  //     .subscribe(({ response }) => {
+  //       this.answer.set(response);
+  //     });
+  // }
 }

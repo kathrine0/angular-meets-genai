@@ -14,6 +14,19 @@ export class OllamaChatController {
     });
   }
 
+
+
+
+
+
+
+
+
+
+
+
+  
+
   @Post('stream')
   async stream(@Body() messages: Message[], @Res() res: Response) {
     const result = await ollama.chat({

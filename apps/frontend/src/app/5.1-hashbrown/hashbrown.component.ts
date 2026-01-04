@@ -56,7 +56,7 @@ import {
             }
             @case ('assistant') {
               <div class="assistant-message">
-                <hb-render-message [message]="$any(message)" />
+                <hb-render-message [message]="message" />
               </div>
             }
           }
