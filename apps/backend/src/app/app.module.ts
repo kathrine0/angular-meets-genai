@@ -6,6 +6,7 @@ import { OllamaChatController } from './2-ollama-chat.controller';
 import { OpenAiToolsController } from './4-openai-tools.controller';
 import { OpenAiController } from './3-openai.controller';
 import { CodeGenController } from './5-code-gen.controller';
+import { HashbrownController } from './5.1-hashbrown';
 
 @Module({
   imports: [CacheModule.register(), ConfigModule.forRoot()],
@@ -15,6 +16,7 @@ import { CodeGenController } from './5-code-gen.controller';
     OpenAiController,
     OpenAiToolsController,
     CodeGenController,
+    HashbrownController
   ],
   providers: [],
 })

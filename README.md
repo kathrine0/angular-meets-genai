@@ -1,6 +1,6 @@
-# Beyond the Browser: Angular meets GenAI
+# Beyond the Browser: Frontend meets GenAI
 
-This is the repository for the "Beyond the Browser: Angular meets GenAI" talk.
+This is the repository for the "Beyond the Browser: Frontend meets GenAI" talk.
 
 ## Run
 

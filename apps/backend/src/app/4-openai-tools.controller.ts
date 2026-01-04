@@ -2,6 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import OpenAI from 'openai';
 import { ResponseInput } from 'openai/resources/responses/responses';
 import { getTicketPrice, getTicketPriceDescription } from './tools';
+import { OPENAI_MODEL } from './settings';
 
 @Controller('openai-tools')
 export class OpenAiToolsController {
@@ -20,7 +21,7 @@ export class OpenAiToolsController {
 
   private async promptOpenAi(messages: ResponseInput) {
     return await this.client.responses.create({
-      model: 'gpt-4.1',
+      model: OPENAI_MODEL,
       input: messages,
       tools: [getTicketPriceDescription],
     });

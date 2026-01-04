@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import ollama, { GenerateResponse } from 'ollama';
+import { OLLAMA_MODEL } from './settings';
 
 @Controller('ollama')
 export class OllamaController {
@@ -10,7 +11,7 @@ export class OllamaController {
     const prompt = 'What is generative AI? Keep the answer short and concise.';
 
     return ollama.generate({
-      model: 'llama3.2',
+      model: OLLAMA_MODEL,
       prompt: prompt,
     });
   }

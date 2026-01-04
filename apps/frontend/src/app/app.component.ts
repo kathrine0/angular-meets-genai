@@ -20,10 +20,11 @@ export class AppComponent {
   navigationItems = [
     { path: '/ollama', label: 'Ollama' },
     { path: '/ollama-chat', label: 'Ollama Chat' },
-    { path: '/ollama-chat-stream', label: 'Ollama Chat Stream' },
+    { path: '/ollama-chat-stream', label: 'Streaming' },
     { path: '/openai', label: 'OpenAI' },
-    { path: '/openai-image', label: 'OpenAI Image' },
-    { path: '/openai-tools', label: 'OpenAI Tools' },
-    { path: '/code-gen', label: 'Code Gen' },
+    { path: '/openai-image', label: 'Image' },
+    { path: '/openai-tools', label: 'Tools' },
+    { path: '/code-gen', label: 'CodeGen' },
+    { path: '/hashbrown', label: 'Hashbrown' },
   ];
 }

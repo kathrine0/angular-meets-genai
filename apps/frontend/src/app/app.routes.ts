@@ -29,5 +29,9 @@ export const routes: Routes = [
   {
     path: 'code-gen',
     loadComponent: () => import('./5-code-gen/code-gen.component').then(m => m.CodeGenComponent)
-  }
+  },
+  {
+    path: 'hashbrown',
+    loadComponent: () => import('./5.1-hashbrown/hashbrown.component').then(m => m.HashbrownComponent)
+  },
 ];
