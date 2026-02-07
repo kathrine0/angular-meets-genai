@@ -19,8 +19,7 @@ export class AppComponent {
 
   navigationItems = [
     { path: '/ollama', label: 'Ollama' },
-    { path: '/ollama-chat', label: 'Ollama Chat' },
-    { path: '/ollama-chat-stream', label: 'Streaming' },
+    { path: '/ollama-chat-stream', label: 'Ollama Chat' },
     { path: '/openai', label: 'OpenAI' },
     { path: '/openai-image', label: 'Image' },
     { path: '/openai-tools', label: 'Tools' },

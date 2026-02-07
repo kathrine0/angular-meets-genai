@@ -31,7 +31,7 @@ export class OllamaChatStreamComponent {
   chatHistory = signal<Conversation[]>([
     {
       role: 'system',
-      content: 'you are a witty assistant. Format your answers in markdown',
+      content: 'you are a grumpy assistant. Format your answers in markdown',
     },
   ]);
 

@@ -1,18 +1,24 @@
-import { Controller, Get } from '@nestjs/common';
-import ollama, { GenerateResponse } from 'ollama';
+import { Controller, Get, Post, Res } from '@nestjs/common';
+import { Response } from 'express';
+import ollama from 'ollama';
 import { OLLAMA_MODEL } from './settings';
 
 @Controller('ollama')
 export class OllamaController {
-  @Get()
-  getOllama(): Promise<GenerateResponse> {
-    throw new Error('This endpoint is not implemented yet.');
+  @Post()
+  async getOllama(prompt: string, @Res() res: Response) {
+    const result = await ollama.generate({
+      model: OLLAMA_MODEL,
+      prompt: prompt || 'Czym jest Generative AI? Odpowiedz krótko i zwięźle.',
+      stream: true,
+    });
 
-    // const prompt = 'What is generative AI? Keep the answer short and concise.';
+    res.header('Content-Type', 'application/octet-stream');
 
-    // return ollama.generate({
-    //   model: OLLAMA_MODEL,
-    //   prompt: prompt,
-    // });
+    for await (const chunk of result) {
+      res.write(chunk.response);
+    }
+
+    return res.end();
   }
 }
