@@ -1,9 +1,14 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject, DestroyRef, signal, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { take } from 'rxjs';
 import { ChatComponent, Conversation } from '../components/chat.component';
-import OpenAI from 'openai';
+import { StreamHelper } from '../stream.helper';
 
 const apiUrl = 'api/openai-tools';
 
@@ -19,10 +24,10 @@ const apiUrl = 'api/openai-tools';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpenaiToolsComponent {
-  private httpClient = inject(HttpClient);
   private destroyRef = inject(DestroyRef);
+  private streamHelper = inject(StreamHelper);
 
-  conversation = signal<Conversation[]>([
+  chatHistory = signal<Conversation[]>([
     {
       role: 'system',
       content: `
@@ -33,23 +38,36 @@ export class OpenaiToolsComponent {
     },
   ]);
 
+  streamedAnswer = signal<string>('');
+
+  conversation = computed<Conversation[]>(() =>
+    this.streamedAnswer()
+      ? [
+          ...this.chatHistory(),
+          { role: 'assistant', content: this.streamedAnswer() },
+        ]
+      : this.chatHistory(),
+  );
+
   onPrompt(prompt: string): void {
-    this.conversation.update((prev) => [
+    this.chatHistory.update((prev) => [
       ...prev,
       { role: 'user', content: prompt },
     ]);
 
-    this.httpClient
-      .post<OpenAI.Responses.Response>(`${apiUrl}`, this.conversation())
-      .pipe(takeUntilDestroyed(this.destroyRef), take(1))
-      .subscribe((response) => {
-        this.conversation.update((prev) => [
-          ...prev,
-          {
-            role: 'assistant',
-            content: response.output_text,
-          },
-        ]);
+    this.streamHelper
+      .stream(`${apiUrl}`, this.conversation())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(({ response, generating }) => {
+        if (generating) {
+          this.streamedAnswer.set(response);
+        } else {
+          this.chatHistory.update((prev) => [
+            ...prev,
+            { role: 'assistant', content: response },
+          ]);
+          this.streamedAnswer.set('');
+        }
       });
   }
 }

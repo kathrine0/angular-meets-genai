@@ -1,8 +1,9 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import OpenAI from 'openai';
-import { ResponseInput } from 'openai/resources/responses/responses';
+import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 import { getTicketPrice, getTicketPriceDescription } from './tools';
 import { OPENAI_MODEL } from './settings';
+import { Response } from 'express';
 
 @Controller('openai-tools')
 export class OpenAiToolsController {
@@ -14,60 +15,78 @@ export class OpenAiToolsController {
     });
   }
 
-  // System prompt:
-  // You are a helpful assistant for an Airline called FlightAI.
-  // Give short, courteous answers, no more than 1 sentence.
-  // Always be accurate. If you don't know the answer, say so.
-
-  private async promptOpenAi(messages: ResponseInput) {
-    return await this.client.responses.create({
+  private async promptOpenAi(messages: ChatCompletionMessageParam[]) {
+    return await this.client.chat.completions.create({
       model: OPENAI_MODEL,
-      input: messages,
+      messages,
       tools: [getTicketPriceDescription],
+      stream: true,
     });
   }
 
   @Post()
-  async chat(@Body() messages: ResponseInput) {
-    const response = await this.promptOpenAi(messages);
-    // debugger;
-
-
-    return response;
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // if (response.output[0].type === 'function_call') {
-  //   return await this.callWithToolResponse(messages, response.output[0]);
-  // }
-  private async callWithToolResponse(
-    messages: ResponseInput,
-    functionCall: OpenAI.Responses.ResponseFunctionToolCall,
+  async chat(
+    @Body() messages: ChatCompletionMessageParam[],
+    @Res() res: Response,
   ) {
-    messages.push(functionCall);
+    res.header('Content-Type', 'application/octet-stream');
 
-    if (functionCall.name === 'getTicketPrice') {
-      const city: string = JSON.parse(functionCall.arguments).city;
-      const result = getTicketPrice(city);
+    try {
+      // Phase 1: Handle tool calls in a non-streaming loop
+      // This resolves all tool calls before we start streaming.
+      while (true) {
+        const response = await this.client.chat.completions.create({
+          model: OPENAI_MODEL,
+          messages,
+          tools: [getTicketPriceDescription],
+        });
 
-      messages.push({
-        type: 'function_call_output',
-        output: result,
-        call_id: functionCall.call_id,
-      });
+        const message = response.choices[0].message;
+
+        // No tool calls — tool resolution is done, move to streaming
+        if (!message.tool_calls || message.tool_calls.length === 0) {
+          break;
+        }
+
+        // Add the assistant's tool-call message to the conversation
+        messages.push(message);
+
+        // Execute each tool and append the result
+        for (const toolCall of message.tool_calls) {
+          if (toolCall.type !== 'function') continue;
+
+          const args = JSON.parse(toolCall.function.arguments);
+          const result =
+            toolCall.function.name === 'getTicketPrice'
+              ? getTicketPrice(args.city)
+              : 'Unknown function';
+
+          messages.push({
+            role: 'tool',
+            content: result,
+            tool_call_id: toolCall.id,
+          });
+        }
+      }
+
+      // Phase 2: Stream the final answer (all tools already resolved)
+      const stream = await this.promptOpenAi(messages);
+
+      for await (const chunk of stream) {
+        const content = chunk.choices[0]?.delta?.content;
+        if (content) {
+          res.write(content);
+        }
+      }
+
+      return res.end();
+    } catch (error) {
+      console.error('Error in openai-tools chat:', error);
+      if (!res.headersSent) {
+        res.status(500).json({ error: 'Internal server error' });
+      } else {
+        res.end();
+      }
     }
-
-    return await this.promptOpenAi(messages);
   }
 }

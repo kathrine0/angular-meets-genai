@@ -75,7 +75,7 @@
     "@nestjs/platform-express": "^11.1.10",
     "axios": "^1.13.2",
     "ollama": "^0.6.3",
-    "openai": "^6.15.0",
+    "openai": "^6.18.0",
     "reflect-metadata": "^0.2.2",
     "remarkable": "^2.0.1",
     "rxjs": "~7.8.2",
