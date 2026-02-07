@@ -7,12 +7,8 @@ export const routes: Routes = [
     loadComponent: () => import('./1-ollama/ollama.component').then(m => m.OllamaComponent)
   },
   {
-    path: 'ollama-chat',
-    loadComponent: () => import('./2-ollama-chat/ollama-chat.component').then(m => m.OllamaChatComponent)
-  },
-  {
     path: 'ollama-chat-stream',
-    loadComponent: () => import('./2.1-ollama-chat-stream/ollama-chat-stream.component').then(m => m.OllamaChatStreamComponent)
+    loadComponent: () => import('./2-ollama-chat-stream/ollama-chat-stream.component').then(m => m.OllamaChatStreamComponent)
   },
   {
     path: 'openai',
