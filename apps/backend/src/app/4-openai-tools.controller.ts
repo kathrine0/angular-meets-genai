@@ -1,9 +1,9 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Response } from 'express';
 import OpenAI from 'openai';
 import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
-import { getTicketPrice, getTicketPriceDescription } from './tools';
 import { OPENAI_MODEL } from './settings';
-import { Response } from 'express';
+import { getTicketPrice, getTicketPriceDescription } from './tools';
 
 @Controller('openai-tools')
 export class OpenAiToolsController {
@@ -56,10 +56,13 @@ export class OpenAiToolsController {
           if (toolCall.type !== 'function') continue;
 
           const args = JSON.parse(toolCall.function.arguments);
-          const result =
-            toolCall.function.name === 'getTicketPrice'
-              ? getTicketPrice(args.city)
-              : 'Unknown function';
+          let result: string;
+
+          if (toolCall.function.name === 'getTicketPrice') {
+            result = getTicketPrice(args.city);
+          } else {
+            result = 'Unknown function';
+          }
 
           messages.push({
             role: 'tool',

@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MdViewerComponent } from '../components/md-viewer.component';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import ollama, { GenerateResponse } from 'ollama/browser';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -57,18 +57,25 @@ export class OllamaComponent {
   // private destroyRef = inject(DestroyRef);
 
   // getAnswer() {
+  //   this.answer.set('Loading...');
+
   //   this.httpClient
-  //     .post(this.apiUrl, this.prompt, {
-  //       responseType: 'text',
-  //       observe: 'events',
-  //       reportProgress: true,
-  //     })
+  //     .post(
+  //       this.apiUrl,
+  //       { prompt: this.prompt },
+  //       {
+  //         responseType: 'text',
+  //         observe: 'events',
+  //         reportProgress: true,
+  //       },
+  //     )
   //     .pipe(
   //       filter(
   //         (event: HttpEvent<string>): boolean =>
   //           event.type === HttpEventType.DownloadProgress ||
   //           event.type === HttpEventType.Response,
   //       ),
+  //       tap(() => this.answer.set('')),
   //       map((event: HttpEvent<string>) => {
   //         if (event.type === HttpEventType.DownloadProgress) {
   //           return {

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 import ollama from 'ollama';
 import { OLLAMA_MODEL } from './settings';
@@ -6,10 +6,13 @@ import { OLLAMA_MODEL } from './settings';
 @Controller('ollama')
 export class OllamaController {
   @Post()
-  async getOllama(prompt: string, @Res() res: Response) {
+  async getOllama(
+    @Body() { prompt }: { prompt: string },
+    @Res() res: Response,
+  ) {
     const result = await ollama.generate({
       model: OLLAMA_MODEL,
-      prompt: prompt || 'Czym jest Generative AI? Odpowiedz krótko i zwięźle.',
+      prompt: prompt,
       stream: true,
     });
 
